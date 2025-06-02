@@ -129,13 +129,13 @@ with col1:
                                 annotated_image = np.array(annotated_resized)
                             except Exception as e:
                                  st.error(f"Ошибка при выполнении проноза: {e}")
-                        if annotated_image is not None:
+                        # if annotated_image is not None:
                             st.image(annotated_image, 
                                 #  use_container_width=True, 
                                 #  channels="BGR"
                                 )
-                        else:
-                            st.warning("Не удалось загрузить прогноз")
+                        # else:
+                            # st.warning("Не удалось загрузить прогноз")
             else:
                 st.info("Выполните прогноз для анализа")
 
