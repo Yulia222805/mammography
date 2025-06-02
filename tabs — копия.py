@@ -84,10 +84,10 @@ with col1:
                             )
                     # st.session_state.upload_image = True
                     
-                    # if st.sidebar.button("Сделать прогноз"):
+                    if st.sidebar.button("Сделать прогноз"):
                     #     st.session_state.show_predict = True
                     #     # st.session_state.active_tab = "Предсказанная"
-                    #     st.rerun()
+                        st.rerun()
                     with st.sidebar:
                         col1_, col2_, col3_ = st.columns([1, 3, 1])
                         with col2_:
@@ -126,18 +126,18 @@ with col1:
 
                                 annotated_pil = Image.fromarray(annotated_image)
                                 annotated_resized = annotated_pil.resize(new_size)  # <-- Применяем resize
-                                # st.session_state.annotated_image = np.array(annotated_resized)
+                                annotated_image = np.array(annotated_resized)
                             except Exception as e:
                                  st.error(f"Ошибка при выполнении проноза: {e}")
-                    # if st.session_state.annotated_image is not None:
-                        st.image(st.session_state.annotated_image, 
-                            #  use_container_width=True, 
-                            #  channels="BGR"
-                             )
-                    # else:
-                        # st.warning("Не удалось загрузить прогноз")
-            # else:
-                # st.info("Выполните прогноз для анализа")
+                        if annotated_image is not None:
+                            st.image(annotated_image, 
+                                #  use_container_width=True, 
+                                #  channels="BGR"
+                                )
+                        else:
+                            st.warning("Не удалось загрузить прогноз")
+            else:
+                st.info("Выполните прогноз для анализа")
 
 
 from datetime import datetime
