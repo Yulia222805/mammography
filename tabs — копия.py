@@ -12,20 +12,20 @@ from model_set import predict_mask, draw_contour_on_image
 st.set_page_config(page_title="Маммограмма", layout="wide")
 # st.header("Анализ маммограммы") #title
 
-# if 'upload_image' not in st.session_state:
-#      st.session_state.upload_image = False
+if 'upload_image' not in st.session_state:
+     st.session_state.upload_image = False
 
-# if 'show_predict' not in st.session_state:
-#      st.session_state.show_predict = False
+if 'show_predict' not in st.session_state:
+     st.session_state.show_predict = False
 
-# if 'original_image_name' not in st.session_state:
-#     st.session_state.original_image_name = ''
+if 'original_image_name' not in st.session_state:
+    st.session_state.original_image_name = ''
 
-# if 'image_np' not in st.session_state:
-#     st.session_state.image_np = None
+if 'image_np' not in st.session_state:
+    st.session_state.image_np = None
 
-# if 'annotated_image' not in st.session_state:
-#     st.session_state.annotated_image = None
+if 'annotated_image' not in st.session_state:
+    st.session_state.annotated_image = None
 
 # if 'active_tab' not in st.session_state:
     # st.session_state.active_tab = "Загруженная маммограмма"
@@ -72,22 +72,22 @@ with col1:
                     resized_image = image.resize(new_size)
 
                     image_np = np.array(image)
-                    # st.session_state.image_np = image_np
+                    st.session_state.image_np = image_np
                     
-                    # if st.session_state.original_image_name != uploaded_file.name:
-                    #     st.session_state.original_image_name = uploaded_file.name
-                    #     st.session_state.annotated_image = None
-                    #     st.session_state.show_predict = False
+                    if st.session_state.original_image_name != uploaded_file.name:
+                        st.session_state.original_image_name = uploaded_file.name
+                        st.session_state.annotated_image = None
+                        st.session_state.show_predict = False
 
                     st.image(resized_image,
                             # use_container_width=True
                             )
-                    # st.session_state.upload_image = True
+                    st.session_state.upload_image = True
                     
-                    if st.sidebar.button("Сделать прогноз"):
+                    # if st.sidebar.button("Сделать прогноз"):
                     #     st.session_state.show_predict = True
                     #     # st.session_state.active_tab = "Предсказанная"
-                        st.rerun()
+                    #     st.rerun()
                     with st.sidebar:
                         col1_, col2_, col3_ = st.columns([1, 3, 1])
                         with col2_:
@@ -95,7 +95,7 @@ with col1:
                                                 # use_container_width=True
                                                 )
                         if predict:
-                            # st.session_state.show_predict = True
+                            st.session_state.show_predict = True
                                 # st.session_state.active_tab = "Предсказанная"
                             st.rerun()   
                 else:
@@ -103,20 +103,20 @@ with col1:
 
         with tab2:
             if uploaded_file is None:
-                # if 'original_image_name' in st.session_state and st.session_state.original_image_name != '':
-                    # st.session_state.annotated_image = None
-                    # st.session_state.image_np = None
-                    # st.session_state.upload_image = False
-                    # st.session_state.show_predict = False
-                    # st.session_state.original_image_name = ''
+                if 'original_image_name' in st.session_state and st.session_state.original_image_name != '':
+                    st.session_state.annotated_image = None
+                    st.session_state.image_np = None
+                    st.session_state.upload_image = False
+                    st.session_state.show_predict = False
+                    st.session_state.original_image_name = ''
                     # st.warning("Нет изображения для анализа")
                     # st.info("Изображение удалено")
                 # else:
-                # st.warning("Нет изображения для анализа")
+                st.warning("Нет изображения для анализа")
 
-            # elif st.session_state.show_predict:
-                # if st.session_state.image_np is not None:
-                    # if st.session_state.annotated_image is None:
+            elif st.session_state.show_predict:
+                if st.session_state.image_np is not None:
+                    if st.session_state.annotated_image is None:
                         with st.spinner("Выполняется анализ..."):
                             try:
                                 image_resized, pred_mask = predict_mask(model, st.session_state.image_np, device='cpu')
@@ -126,17 +126,16 @@ with col1:
 
                                 annotated_pil = Image.fromarray(annotated_image)
                                 annotated_resized = annotated_pil.resize(new_size)  # <-- Применяем resize
-                                annotated_image = np.array(annotated_resized)
-                                st.image(annotated_image, 
-                                #  use_container_width=True, 
-                                #  channels="BGR"
-                                )
+                                st.session_state.annotated_image = np.array(annotated_resized)
                             except Exception as e:
                                  st.error(f"Ошибка при выполнении проноза: {e}")
-                        # if annotated_image is not None:
-
-                        # else:
-                            # st.warning("Не удалось загрузить прогноз")
+                    if st.session_state.annotated_image is not None:
+                        st.image(st.session_state.annotated_image, 
+                            #  use_container_width=True, 
+                            #  channels="BGR"
+                             )
+                    else:
+                        st.warning("Не удалось загрузить прогноз")
             else:
                 st.info("Выполните прогноз для анализа")
 
