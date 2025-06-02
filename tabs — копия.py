@@ -63,7 +63,7 @@ with col1:
                     predict = st.button("Сделать прогноз")
                 if predict:
                     show_predict = True
-                    st.experimental_rerun()
+                    st.rerun()
         else:
             st.info("Загрузите изображение")
 
