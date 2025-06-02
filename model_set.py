@@ -54,24 +54,46 @@ def pad_to_square(img):
 
 #     return image_resized, pred_mask
 
-def predict_mask(model, image_np, device='cpu', threshold=0.5):
-    """
-    :param model: обученная модель
-    :param image_np: numpy array (grayscale), исходное изображение
-    :param device: 'cpu' или 'cuda'
-    :param threshold: порог бинаризации маски
-    :return: resized_image, pred_mask
-    """
+# def predict_mask(model, image_np, device='cpu', threshold=0.5):
+#     """
+#     :param model: обученная модель
+#     :param image_np: numpy array (grayscale), исходное изображение
+#     :param device: 'cpu' или 'cuda'
+#     :param threshold: порог бинаризации маски
+#     :return: resized_image, pred_mask
+#     """
 
-    # image_np — это уже numpy array, НЕ нужно читать через imread
-    image = image_np.copy()
+#     # image_np — это уже numpy array, НЕ нужно читать через imread
+#     image = image_np.copy()
 
-    # Обработка
+#     # Обработка
+#     image_cropped, _ = remove_artifacts(image, np.zeros_like(image))
+#     image_padded = pad_to_square(image_cropped)
+#     image_resized = cv2.resize(image_padded, (512, 512))
+
+#     # image_resized = cv2.resize(image, (512, 512))
+
+#     cl_img = image_resized.astype(np.float32) / 255.0
+
+#     transform = A.Compose([
+#         A.Normalize(mean=[0.1454], std=[0.2365], max_pixel_value=1.0, p=1),
+#         ToTensorV2()
+#     ])
+#     augmented = transform(image=cl_img)
+#     input_tensor = augmented['image'].unsqueeze(0).to(device)
+
+#     with torch.no_grad():
+#         output = model(input_tensor)
+#     pred_mask = torch.sigmoid(output).cpu().numpy()[0, 0] > threshold
+#     pred_mask = (pred_mask * 255).astype(np.uint8)
+
+#     return image_resized, pred_mask
+
+def predict_mask(model, image, device='cpu', threshold=0.5):
+    # image — numpy array (grayscale)
     image_cropped, _ = remove_artifacts(image, np.zeros_like(image))
     image_padded = pad_to_square(image_cropped)
     image_resized = cv2.resize(image_padded, (512, 512))
-
-    # image_resized = cv2.resize(image, (512, 512))
 
     cl_img = image_resized.astype(np.float32) / 255.0
 
