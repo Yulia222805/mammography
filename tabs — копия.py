@@ -204,17 +204,17 @@ import os
 #     #     )
 
 with col2:
+
+    # --- Блок информации о пациенте ---
     st.markdown("### Информация о пациенте")
 
-    with st.form(key="patient_form"):
-        full_name = st.text_input("ФИО пациента")
-        birth_date = st.date_input("Дата рождения", value=None, format="DD/MM/YYYY")
-        visit_date = st.date_input("Дата приёма", value=None, format="DD/MM/YYYY")
-        description = st.text_area("Описание/заметки врача", height=200)
+    full_name = st.text_input("ФИО пациента")
+    birth_date = st.date_input("Дата рождения", value=None, format="DD/MM/YYYY")
+    visit_date = st.date_input("Дата приёма", value=None, format="DD/MM/YYYY")
+    description = st.text_area("Описание/заметки врача", height=200)
 
-        submit_button = st.form_submit_button(label="Сохранить данные")
-
-    if submit_button:
+    # --- Проверяем, заполнено ли хоть одно поле ---
+    if full_name or birth_date or visit_date or description:
         data = []
         if full_name:
             data.append(f"ФИО пациента: {full_name}")
@@ -225,23 +225,15 @@ with col2:
         if description:
             data.append(f"Описание: {description}")
 
-        if data:
-            file_content = "\n".join(data)
-            file_name = f"patient_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        file_content = "\n".join(data)
+        file_name = f"patient_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
-            # Сохраняем в session_state
-            # st.session_state.file_content = file_content
-            # st.session_state.file_name = file_name
-
-            st.success(f"Данные сохранены. Вы можете скачать их ниже.")
-        else:
-            st.warning("Нет данных для сохранения.")
-
-    # Всегда проверяем, есть ли что скачивать
-    # if 'file_content' in st.session_state and 'file_name' in st.session_state:
-    st.download_button(
-        label="Скачать файл",
-        data=file_content,
-        file_name=file_name,
-        mime="text/plain"
-    )
+        # --- Кнопка скачивания появляется автоматически ---
+        st.download_button(
+            label="📥 Скачать файл",
+            data=file_content,
+            file_name=file_name,
+            mime="text/plain"
+        )
+    else:
+        st.info("ℹ️ Введите данные для формирования файла.")
