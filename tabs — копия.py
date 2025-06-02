@@ -127,13 +127,14 @@ with col1:
                                 annotated_pil = Image.fromarray(annotated_image)
                                 annotated_resized = annotated_pil.resize(new_size)  # <-- Применяем resize
                                 annotated_image = np.array(annotated_resized)
-                            except Exception as e:
-                                 st.error(f"Ошибка при выполнении проноза: {e}")
-                        # if annotated_image is not None:
-                            st.image(annotated_image, 
+                                st.image(annotated_image, 
                                 #  use_container_width=True, 
                                 #  channels="BGR"
                                 )
+                            except Exception as e:
+                                 st.error(f"Ошибка при выполнении проноза: {e}")
+                        # if annotated_image is not None:
+
                         # else:
                             # st.warning("Не удалось загрузить прогноз")
             else:
