@@ -42,52 +42,25 @@ with st.sidebar:
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    tab1, tab2 = st.tabs(["Загруженная маммограмма", "Прогнозирование"])
+    if uploaded_file is not None:
+        # Открываем изображение напрямую из загруженного файла
+        image = Image.open(uploaded_file).convert('L')  # grayscale
+        image_np = np.array(image)  # преобразуем в numpy array
 
-    with tab1:
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file).convert('L')
-            original_width, original_height = image.size
+        st.image(image, caption="Загруженная маммограмма", use_container_width=True)
 
-            new_size = (int(original_width / 0.83), int(original_height / 0.83))
-            resized_image = image.resize(new_size)
-
-            image_np = np.array(image)
-            upload_image = True
-
-            st.image(resized_image)
-
-            with st.sidebar:
-                col1_, col2_, col3_ = st.columns([1, 3, 1])
-                with col2_:
-                    predict = st.button("Сделать прогноз")
-                if predict:
-                    show_predict = True
-                    st.rerun()
-        else:
-            st.info("Загрузите изображение")
-
-    with tab2:
-        if uploaded_file is None:
-            st.warning("Нет изображения для анализа")
-        elif uploaded_file is not None and predict:
-            if image_np is not None:
+        if st.sidebar.button("🔮 Инференс"):
+            with st.spinner("Выполняется анализ..."):
                 try:
-                    with st.spinner("Выполняется анализ..."):
-                        image_resized, pred_mask = predict_mask(model, image_np, device='cpu')
-                        annotated_image = draw_contour_on_image(image_resized, pred_mask)
+                    # Теперь мы передаём изображение как numpy array, а не путь к файлу
+                    image_resized, pred_mask = predict_mask(model, image=image_np, device='cpu')
+                    annotated_image = draw_contour_on_image(image_resized, pred_mask)
 
-                        annotated_pil = Image.fromarray(annotated_image)
-                        annotated_resized = annotated_pil.resize(new_size)
-                        annotated_image = np.array(annotated_resized)
+                    st.markdown("###### Результат анализа:")
+                    st.image(annotated_image, use_container_width=True, channels="BGR")
 
-                    st.image(annotated_image)
                 except Exception as e:
-                    st.error(f"Ошибка при выполнении прогноза: {e}")
-            else:
-                st.warning("Не удалось загрузить прогноз")
-        else:
-            st.info("Выполните прогноз для анализа")
+                    st.error(f"Ошибка при выполнении инференса: {e}")
 
 with col2:
     st.markdown("### Информация о пациенте")
