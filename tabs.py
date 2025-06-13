@@ -214,7 +214,7 @@ with col2:
         full_name = st.text_input("ФИО пациента")
         birth_date = st.date_input(
              "Дата рождения", 
-             value=current_date, 
+             value=None, 
              min_value=min_birth_date,
              max_value=max_birth_date,
              format="DD/MM/YYYY")
