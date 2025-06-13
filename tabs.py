@@ -206,7 +206,7 @@ import os
 with col2:
     st.markdown("### Информация о пациенте")
 
-    max_birth_date = date.today() - timedelta(days=365 * 100)
+    #max_birth_date = date.today() - timedelta(days=365 * 100)
     min_birth_date = date.today() - timedelta(days=365 * 120)
     current_date = datetime.today().date()
 
@@ -216,7 +216,6 @@ with col2:
              "Дата рождения", 
              value=None, 
              min_value=min_birth_date,
-             max_value=max_birth_date,
              format="DD/MM/YYYY")
         visit_date = st.date_input("Дата приёма", value=None, format="DD/MM/YYYY")
         description = st.text_area("Описание/заметки врача", height=200)
