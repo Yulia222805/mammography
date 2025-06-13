@@ -208,12 +208,13 @@ with col2:
 
     max_birth_date = date.today() - timedelta(days=365 * 100)
     min_birth_date = date.today() - timedelta(days=365 * 120)
+    current_date = datetime.today().date()
 
     with st.form(key="patient_form"):
         full_name = st.text_input("ФИО пациента")
         birth_date = st.date_input(
              "Дата рождения", 
-             value=None, 
+             value=current_date, 
              min_value=min_birth_date,
              max_value=max_birth_date,
              format="DD/MM/YYYY")
