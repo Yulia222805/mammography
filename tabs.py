@@ -6,6 +6,7 @@ import torch
 import numpy as np
 import cv2
 import segmentation_models_pytorch as smp
+from datetime import timedelta
 
 from model_set import predict_mask, draw_contour_on_image
 
@@ -206,9 +207,17 @@ import os
 with col2:
     st.markdown("### Информация о пациенте")
 
+    max_birth_date = date.today() - timedelta(days=365 * 100)
+    min_birth_date = date.today() - timedelta(days=365 * 120)
+
     with st.form(key="patient_form"):
         full_name = st.text_input("ФИО пациента")
-        birth_date = st.date_input("Дата рождения", value=None, format="DD/MM/YYYY")
+        birth_date = st.date_input(
+             "Дата рождения", 
+             value=None, 
+             min_value=min_birth_date,
+             max_value=max_birth_date,
+             format="DD/MM/YYYY")
         visit_date = st.date_input("Дата приёма", value=None, format="DD/MM/YYYY")
         description = st.text_area("Описание/заметки врача", height=200)
 
