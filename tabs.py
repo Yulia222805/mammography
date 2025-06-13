@@ -207,7 +207,7 @@ with col2:
     st.markdown("### Информация о пациенте")
 
     #max_birth_date = date.today() - timedelta(days=365 * 100)
-    min_birth_date = date.today() - timedelta(days=365 * 120)
+    min_birth_date = date.today() - timedelta(days=365 * 100)
     current_date = datetime.today().date()
 
     with st.form(key="patient_form"):
